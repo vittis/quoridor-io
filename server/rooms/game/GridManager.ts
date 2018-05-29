@@ -1,4 +1,5 @@
 import { Vertex } from "./Vertex";
+import * as easystarjs from "easystarjs";
 
 export class GridManager {
 
@@ -8,6 +9,10 @@ export class GridManager {
 
     fullGrid:number[][];
 
+    playersPos = [{x: 0, y: 4}, {x: 8, y: 4}];
+
+    easystar:easystarjs.js;
+
     constructor() {
         this.grid = [];
         for (var i = 0; i < 9; i++) {
@@ -16,8 +21,14 @@ export class GridManager {
                 this.grid[i][j] = 0;
             }
         }
-        this.grid[0][4] = 2;
-        this.grid[8][4] = 2;
+
+        for(var i= 0; i<this.playersPos.length; i++) {
+            let x = this.playersPos[i].x;
+            let y = this.playersPos[i].y;
+            this.grid[x][y] = 2;
+        }
+        /* this.grid[0][4] = 2;
+        this.grid[8][4] = 2; */
 
         this.vertexs=[];
         for (var i = 0; i < 8; i++) {
@@ -35,7 +46,96 @@ export class GridManager {
             }
         }
         this.setupFullGrid();
+
+        this.easystar = new easystarjs.js();
+        this.setupPathfinding();
+        this.easystar.enableSync();
+
         console.log("Grid Manager Criado");
+    }
+
+
+    setupPathfinding() {
+   
+        /* this.easystar.setGrid(this.fullGrid);
+        this.easystar.setAcceptableTiles([0,2]);
+
+        this.putFence(0, 0, true)
+        
+        console.log("q");
+        this.easystar.findPath(0, 0, 0, 16, function( path ) {//tem q inverter x y > j i
+            console.log("kaw");
+            if (path == null) {
+                console.log("Path was not found.");
+            } else {
+                console.log(path.length+" lenght")
+                console.log("Path was found. The first Point is " + path[0].x + " " + path[0].y);
+            }
+        });
+        console.log("bora porra")
+        this.easystar.calculate();
+        this.putFence(0, 2, true)
+        this.putFence(0, 4, true)
+
+        this.easystar.findPath(0, 0, 0, 16, function( path ) {//tem q inverter x y > j i
+            console.log("kaw");
+            if (path == null) {
+                console.log("Path was not found.");
+            } else {
+                console.log(path.length+" lenght")
+                console.log("Path was found. The first Point is " + path[0].x + " " + path[0].y);
+            }
+        });
+        this.easystar.calculate(); */
+
+    }
+
+    checkHasSolution(gridCopy) {
+        this.easystar.setGrid(gridCopy);
+        this.easystar.setAcceptableTiles([0,2]);
+
+        var foundPathP1=false;
+        var foundPathP2=false;
+
+        for (var i=0; i<this.playersPos.length; i++) {
+            if (i==0) {//goal: down
+                for(var k=0; k<17;k++) {
+                    if (!foundPathP1) {
+                        this.easystar.findPath(this.playersPos[i].y*2, this.playersPos[i].x*2, k, 16, function( path ) {
+                            if (path == null) {
+                                console.log("Path was not found.");
+                            } else {
+                                console.log("Path was found for TOP player p1");
+                                foundPathP1=true;
+                            }
+                        });
+                        this.easystar.calculate();
+                    }
+                }
+            }
+            else if (i==1) {
+                for(var k=0; k<17;k++) {
+                    if (!foundPathP2) {
+                        this.easystar.findPath(this.playersPos[i].y*2, this.playersPos[i].x*2, k, 0, function( path ) {
+                            if (path == null) {
+                                console.log("Path was not found.");
+                            } else {
+                                console.log("Path was found for BOTTOM player p2");
+                                foundPathP2=true;
+                            }
+                        });
+                        this.easystar.calculate();
+                    }
+                }
+            }
+        }
+        console.log("p1 found path: "+foundPathP1+", p2 found path: "+foundPathP2);
+        if (foundPathP1 && foundPathP2) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     isValidFence(i, j, horizontal:boolean) :boolean {
@@ -63,8 +163,6 @@ export class GridManager {
                 console.log("not valid4");
                 return false;
             }
-
-            return true;
         }
         else {
             if (!this.isValidVertex(Math.max(i-1,0), j)) {
@@ -85,11 +183,27 @@ export class GridManager {
                 console.log("not valid4");
                 return false;
             }
-
-            return true;
         }
 
+        var gridCopy = [];
+        for (var o = 0; o < 17; o++) {
+            gridCopy[o] = [];
+            for (var p = 0; p < 17; p++) {
+                gridCopy[o][p] = this.fullGrid[o][p];
+            }
+        }
 
+        if (!horizontal) {
+            gridCopy[(i*2+1)+1][(j*2+1)] = 1;
+            gridCopy[(i*2+1)-1][(j*2+1)] = 1;
+        }
+        else {
+            gridCopy[(i*2+1)][(j*2+1)+1] = 1;
+            gridCopy[(i*2+1)][(j*2+1)-1] = 1;
+        }
+
+        return this.checkHasSolution(gridCopy);
+        
     }
 
     putFence(i, j, horizontal:boolean) {
