@@ -1,1 +1,36 @@
-@font-face{font-family:"Connection";src:url("../../assets/font/Connection.ttf") format("truetype")}body{font-size:10px;color:black;background-color:#FFFFFF}body div.container{text-align:center}body div.container h1{font-family:"Connection",cursive;padding:0;font-size:50px}body div.container div#game{width:800px;display:block;margin-left:auto;margin-right:auto}
+
+html {
+    width: 100vw;
+    height: 100vh;
+}
+body {
+    font-family: 'Lato', sans-serif;
+    font-size:20px;
+    color:white;
+    background: radial-gradient(ellipse at bottom center, #2a1a33 -50%, #110b13 100%);
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#particles-js {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0;
+    z-index:-2; 
+}
+.container {
+    position: fixed;
+    z-index:-1; 
+}
+.title {
+    font-size: 3em;
+    align-self: flex-start;
+    margin-top: 20px;
+}
+
