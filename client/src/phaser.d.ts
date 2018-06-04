@@ -3427,7 +3427,7 @@ declare namespace Phaser {
          * 
          * The values stored within this object are read-only and should not be changed at run-time.
          */
-        config: GameConfig;
+        config: Phaser.Boot.Config;
 
         /**
          * A reference to either the Canvas or WebGL Renderer that this Game is using.

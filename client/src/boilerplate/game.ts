@@ -8,18 +8,11 @@
 
 import "phaser";
 import { MainScene } from "./scenes/mainScene";
-import * as Colyseus from "colyseus.js"
+import { HtmlUI }from "./html_ui/htmlUI";
+import {Network} from "./network"
 
-var host = window.document.location.host.replace(/:.*/, '');
 
-var client = new Colyseus.Client(location.protocol.replace("http", "ws") + host + (location.port ? ':3333' : ''));
-console.log("karqpov a   ")
-
-var room = client.join("game");
-
-room.onJoin.add(function () {
-  console.log("joinedsam");
-});
+Network.setup();
 
 
 var originalSize = {
@@ -27,7 +20,6 @@ var originalSize = {
   height: 768
 }
 
-// main game configuration
 const config: GameConfig = {
   width: originalSize.width,
   height: originalSize.height,
@@ -38,7 +30,7 @@ const config: GameConfig = {
   transparent: true,
 };
 
-var game : Phaser.Game;
+export var game : Phaser.Game;
 
 export class Game extends Phaser.Game {
   constructor(config: GameConfig) {
@@ -51,6 +43,7 @@ window.onload = () => {
   particlesJS.load('particles-js', './assets/boilerplate/particlesjs-config.json', function() {
   });
   game = new Game(config);
+  HtmlUI.setup();
 };
 
 
