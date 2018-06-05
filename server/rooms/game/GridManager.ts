@@ -9,7 +9,7 @@ export class GridManager {
 
     fullGrid:number[][];
 
-    playersPos = [{x: 0, y: 4}, {x: 8, y: 4}];
+    playersPos :Array<any> = [{x: 0, y: 4}, {x: 8, y: 4}];
 
     easystar:easystarjs.js;
 

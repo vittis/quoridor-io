@@ -15,7 +15,9 @@ export class BoardState {
     }
 
     addPlayer (client) {
-        this.players[ client.sesssionId ] = new GamePlayer();
+        var playerIndex = Object.keys(this.players).length;
+        this.players[client.sessionId] = new GamePlayer(this.gridManager.playersPos[playerIndex].x, this.gridManager.playersPos[playerIndex].y, playerIndex);
+        console.log("new player joined = "+this.players[client.sessionId].x);
     }
 
     removePlayer (client) {

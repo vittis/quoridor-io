@@ -4,10 +4,7 @@ export declare class GridManager {
     grid: number[][];
     vertexs: Vertex[][];
     fullGrid: number[][];
-    playersPos: {
-        x: number;
-        y: number;
-    }[];
+    playersPos: Array<any>;
     easystar: easystarjs.js;
     constructor();
     setupPathfinding(): void;
